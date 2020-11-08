@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <cmath>
 #include <vector>
 using namespace std;
 class Row2 {
@@ -19,7 +20,7 @@ public:
 		a = row.a;
 		b = row.b;
 	}
-};
+}; // Столбец высоты 2
 	class Matrix2x2 {
 	private:
 
@@ -95,27 +96,30 @@ public:
 		~Matrix2x2()
 		{
 		}
-	};
-#include <cmath>
+	};// Матрица 2x2
+
 	int main()
 	{
-		Matrix2x2 E = Matrix2x2::E();
-		Matrix2x2 A(-500.005, 499.995, 499.995, -500.005);
-		Row2 v0(7, 13);
-		double h = 0.001;
-		//Row2 v1 = (E + A * h)*v0;
+		setlocale(LC_ALL, "Russian");
+		Matrix2x2 E = Matrix2x2::E(); // Получение единичной матрицы
+		Matrix2x2 A(-500.005, 499.995, 499.995, -500.005); 
+		Row2 v0(7, 13); // Вектор v0
+		double h; // Шаг
 		Matrix2x2 temp = Matrix2x2::E();
-		Row2 v1 = (E + A * h + A.pow(2)*h*h*0.5)*v0;
-		for (int i = 1; i <= 200'000'000; i++) {
+		cout << "Введите шаг: ";
+		cin >> h;
+		int count;
+		cout << "Введите максимальное количетсво итераций: ";
+		cin >> count;
+		int interval;
+		cout << "Интервал вывода промежуточных значений: ";
+		cin >> interval;
+		Row2 v1 = (E + A * h + A.pow(2)*h*h*0.5)*v0; // явный РК порядка 2 формула (16.4)
+		for (int i = 1; i <= count; i++) {
 			temp = temp * (E + A * h + A.pow(2)*(h*h*0.5));
 			Row2 current = temp * v0;
-			if (i % 10000==0) {
+			if (i % interval==0) {
 				std::cout << i << " Current v1 = " << current.a << "  v2 = " << current.b << endl;
 			}
 		}
-		Row2 vn = temp * v0;
-		if (fabs(vn.b) > 1) {
-			std::cout << "Hello World!\n";
-		}
-		std::cout << "Hello World!\n";
 	}
