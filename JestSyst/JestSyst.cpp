@@ -165,13 +165,13 @@ public:
 			}
 			else {
 			system("cls");
-			cout << setw(30) << "Таблица" << endl;
-			cout << setw(36) << "Явный метод РК - II, h = " << h << endl;
+			cout << setw(36) << "Таблица" << endl;
+			cout << setw(42) << "Явный метод РК - II, h = " << h << endl;
 			cout << endl;
-			cout << setprecision(14) << "x" << std::setw(20) << "v1" << std::setw(25) << "v2" << endl;
-		//	cout << 0 << std::setw(20) << v0.a << std::setw(25) << v0.b << endl;
+			cout << setprecision(14) << "x" << std::setw(25) << "v1" << std::setw(25) << "v2" << endl;
+		 	//cout << 0 << std::setw(20) << v0.a << std::setw(25) << v0.b << endl;
 			for (int i = 0; i < rows.size(); i++) {
-				cout << (i) * h << std::setw(20) << std::right << rows[i].a << std::setw(25) << std::right << rows[i].b << endl;
+				cout << (i) * h << std::setw(25) << std::right << rows[i].a << std::setw(25) << std::right << rows[i].b << endl;
 			}
 		}
 		}
