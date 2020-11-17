@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <iomanip>
 using namespace std;
 class Row2 {
 public:
@@ -105,21 +106,73 @@ public:
 		Matrix2x2 A(-500.005, 499.995, 499.995, -500.005); 
 		Row2 v0(7, 13); // Вектор v0
 		double h; // Шаг
+		int tCount;
 		Matrix2x2 temp = Matrix2x2::E();
+		cout << "Решение жесткой ситемы:\n" << endl;
+		cout << "u'(1) = -500.005 * u(1) + 499.995 * u(2)" << endl;
+		cout << "u'(2) = 499.995 * u(1) - 500.005 * u(2)" << endl;
+		cout << "Методом РК-II\n"<<endl;
+		cout << "Ограничение на шаг: h > 0  and h < 0.002" << endl;
 		cout << "Введите шаг: ";
 		cin >> h;
+		if (h <= 0) { throw 1; }
 		int count;
-		cout << "Введите максимальное количетсво итераций: ";
+		cout << "Введите количетсво итераций: ";
 		cin >> count;
 		int interval;
 		cout << "Интервал вывода промежуточных значений: ";
 		cin >> interval;
+
+		cout << "Введите количество первых значений в таблице: ";
+		cin >> tCount;
+		vector<Row2> rows;
+		rows.push_back({ 7,13 });
+		std::cout << 0 << " Current v1 = " << v0.a << "  v2 = " << v0.b << endl;
 		Row2 v1 = (E + A * h + A.pow(2)*h*h*0.5)*v0; // явный РК порядка 2 формула (16.4)
 		for (int i = 1; i <= count; i++) {
 			temp = temp * (E + A * h + A.pow(2)*(h*h*0.5));
 			Row2 current = temp * v0;
-			if (i % interval==0) {
-				std::cout << i << " Current v1 = " << current.a << "  v2 = " << current.b << endl;
+			if (i <= tCount) {
+				rows.push_back(current);
 			}
+			if (i % interval==0) {
+				std::cout << i*h << " Current v1 = " << current.a << "  v2 = " << current.b << endl;
+			}
+		}
+		char a;
+		cout << "Подсчет окончен. Вывести таблицу? (y/n) ";
+		cin >> a;
+		
+		if (a == 'y')
+		{
+			cout << "Добавить точное решение?  (y/n) ";
+			char b;
+			cin >> b;
+			if (b == 'y') {
+				vector<Row2> u;
+				u.push_back({ 7,13 });
+				for (int i = 1; i <= tCount; i++) {
+					u.push_back({ -3 * exp(-1000 * i * h) + 10 * exp(-0.01 * i * h),3 * exp(-1000 * i * h) + 10 * exp(-0.01 * i * h) });
+				}
+				system("cls");
+				cout << setw(40) << "Таблица" << endl;
+				cout << setw(46) << "Явный метод РК - II, h = " << h << endl;
+				cout << endl;
+				cout << setprecision(10) << "x" << std::setw(16) << "v1" << std::setw(16) << "v2" << std::setw(16) << "u1" << std::setw(16) << "u2" << endl;;
+				for (int i = 0; i < rows.size(); i++) {
+					cout << (i)*h << std::setw(16) << std::right << rows[i].a << std::setw(16) << std::right << rows[i].b << std::setw(16)<<u[i].a<< std::setw(16) <<u[i].b<< endl;
+				}
+			}
+			else {
+			system("cls");
+			cout << setw(30) << "Таблица" << endl;
+			cout << setw(36) << "Явный метод РК - II, h = " << h << endl;
+			cout << endl;
+			cout << setprecision(14) << "x" << std::setw(20) << "v1" << std::setw(25) << "v2" << endl;
+		//	cout << 0 << std::setw(20) << v0.a << std::setw(25) << v0.b << endl;
+			for (int i = 0; i < rows.size(); i++) {
+				cout << (i) * h << std::setw(20) << std::right << rows[i].a << std::setw(25) << std::right << rows[i].b << endl;
+			}
+		}
 		}
 	}
